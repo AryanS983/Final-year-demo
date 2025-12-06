@@ -1,0 +1,8 @@
+Flask
+pandas
+numpy
+plotly
+mftool
+yfinance
+scikit-learn
+reportlab

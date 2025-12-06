@@ -1,0 +1,453 @@
+{% extends 'base.html' %}
+{% block title %}Fund Analysis - {{ scheme_code }}{% endblock %}
+{% block content %}
+<div class="dashboard">
+  <div class="dashboard-header">
+    <h2>Mutual Fund Analysis</h2>
+    <p style="color: rgba(255,255,255,0.8); font-size: 1.1rem;">{{ scheme_code }}</p>
+  </div>
+
+  <!-- Fund Information Card -->
+  <div class="glass-card">
+    <h3 style="margin-bottom: 1rem; color: #2d3748;">Analysis Summary</h3>
+    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; text-align: center;">
+      <div style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem;">{{ scheme_name }}</div>
+      <div style="font-size: 0.8rem; opacity: 0.9; margin-bottom: 0.5rem;">Scheme Code: {{ scheme_code }}</div>
+      <div style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 0.5rem;">ANALYSIS PERIOD</div>
+      <div style="font-size: 1rem; font-weight: 700;">{{ start }} to {{ end }}</div>
+      <div style="font-size: 0.8rem; opacity: 0.8; margin-top: 0.5rem;">
+        📊 Analyzing {{ metrics['Total Trading Days'] }} trading days
+      </div>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+      <div style="text-align: center; padding: 1rem; background: rgba(255,255,255,0.5); border-radius: 8px;">
+        <div style="font-size: 0.9rem; color: #4a5568; font-weight: 600;">TOTAL RETURN</div>
+        <div style="font-size: 1.5rem; font-weight: 700; color: #10b981; margin-top: 0.5rem;">{{ metrics['Total Return %'] }}%</div>
+      </div>
+      <div style="text-align: center; padding: 1rem; background: rgba(255,255,255,0.5); border-radius: 8px;">
+        <div style="font-size: 0.9rem; color: #4a5568; font-weight: 600;">NAV CHANGE</div>
+        <div style="font-size: 1rem; font-weight: 700; color: #2d3748; margin-top: 0.5rem;">₹{{ metrics['Start NAV'] }} → ₹{{ metrics['End NAV'] }}</div>
+      </div>
+      <div style="text-align: center; padding: 1rem; background: rgba(255,255,255,0.5); border-radius: 8px;">
+        <div style="font-size: 0.9rem; color: #4a5568; font-weight: 600;">TRADING DAYS</div>
+        <div style="font-size: 1.2rem; font-weight: 700; color: #2d3748; margin-top: 0.5rem;">{{ metrics['Total Trading Days'] }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Industry Standard Risk Ratios -->
+  <div class="glass-card">
+    <h3 style="margin-bottom: 1rem; color: #2d3748;">📊 Industry Standard Risk Ratios</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+      <div style="text-align: center; padding: 1rem; background: rgba(255,255,255,0.5); border-radius: 8px;">
+        <div style="font-size: 0.9rem; color: #4a5568; font-weight: 600;">SHARPE RATIO</div>
+        <div style="font-size: 1.2rem; font-weight: 700; color: #2d3748; margin-top: 0.5rem;">{{ "%.2f"|format(metrics['Sharpe Ratio']) }}</div>
+        <div style="font-size: 0.7rem; color: #666; margin-top: 0.3rem;">Risk-adjusted return</div>
+      </div>
+      <div style="text-align: center; padding: 1rem; background: rgba(255,255,255,0.5); border-radius: 8px;">
+        <div style="font-size: 0.9rem; color: #4a5568; font-weight: 600;">SORTINO RATIO</div>
+        <div style="font-size: 1.2rem; font-weight: 700; color: #2d3748; margin-top: 0.5rem;">{{ "%.2f"|format(metrics['Sortino Ratio']) }}</div>
+        <div style="font-size: 0.7rem; color: #666; margin-top: 0.3rem;">Downside risk-adjusted</div>
+      </div>
+      <div style="text-align: center; padding: 1rem; background: rgba(255,255,255,0.5); border-radius: 8px;">
+        <div style="font-size: 0.9rem; color: #4a5568; font-weight: 600;">BETA</div>
+        <div style="font-size: 1.2rem; font-weight: 700; color: #2d3748; margin-top: 0.5rem;">{{ "%.2f"|format(metrics['Beta']) }}</div>
+        <div style="font-size: 0.7rem; color: #666; margin-top: 0.3rem;">Market sensitivity</div>
+      </div>
+      <div style="text-align: center; padding: 1rem; background: rgba(255,255,255,0.5); border-radius: 8px;">
+        <div style="font-size: 0.9rem; color: #4a5568; font-weight: 600;">ALPHA</div>
+        <div style="font-size: 1.2rem; font-weight: 700; color: #2d3748; margin-top: 0.5rem;">{{ "%.2f"|format(metrics['Alpha']) }}%</div>
+        <div style="font-size: 0.7rem; color: #666; margin-top: 0.3rem;">Excess return vs benchmark</div>
+      </div>
+      <div style="text-align: center; padding: 1rem; background: rgba(255,255,255,0.5); border-radius: 8px;">
+        <div style="font-size: 0.9rem; color: #4a5568; font-weight: 600;">INFORMATION RATIO</div>
+        <div style="font-size: 1.2rem; font-weight: 700; color: #2d3748; margin-top: 0.5rem;">{{ "%.2f"|format(metrics['Information Ratio']) }}</div>
+        <div style="font-size: 0.7rem; color: #666; margin-top: 0.3rem;">Active return per unit risk</div>
+      </div>
+      <div style="text-align: center; padding: 1rem; background: rgba(255,255,255,0.5); border-radius: 8px;">
+        <div style="font-size: 0.9rem; color: #4a5568; font-weight: 600;">CALMAR RATIO</div>
+        <div style="font-size: 1.2rem; font-weight: 700; color: #2d3748; margin-top: 0.5rem;">{{ "%.2f"|format(metrics['Calmar Ratio']) }}</div>
+        <div style="font-size: 0.7rem; color: #666; margin-top: 0.3rem;">Annual return / Max drawdown</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAV Chart -->
+  <div class="glass-card chart-container">
+    <div class="chart-title">📈 NAV Performance<br><small style="font-size: 0.8rem; color: #666;">{{ start }} to {{ end }}</small></div>
+    <div id="nav-chart" style="height: 350px;"></div>
+  </div>
+
+  <!-- Positive/Negative Days Pie Chart -->
+  <div class="glass-card chart-container">
+    <div class="chart-title">📊 Good Days vs Bad Days</div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center;">
+      <div id="days-pie-chart" style="height: 300px;"></div>
+      <div style="padding: 1rem;">
+        <h4 style="color: #2d3748; margin-bottom: 1rem;">Day Analysis</h4>
+        <div style="margin-bottom: 1rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <span style="color: #10b981; font-weight: 600;">✅ Positive Days</span>
+            <span style="font-weight: 700;">{{ metrics['Positive Days'] }} days ({{ metrics['Positive Days %'] }}%)</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="color: #ef4444; font-weight: 600;">❌ Negative Days</span>
+            <span style="font-weight: 700;">{{ metrics['Negative Days'] }} days ({{ metrics['Negative Days %'] }}%)</span>
+          </div>
+        </div>
+        <div style="background: rgba(255,255,255,0.5); padding: 1rem; border-radius: 8px;">
+          <p style="margin: 0; font-size: 0.9rem; color: #4a5568;">
+            {% if metrics['Positive Days %'] > 55 %}
+              🟢 <strong>Good Performance:</strong> More than half the days were positive, showing consistent growth.
+            {% elif metrics['Positive Days %'] > 45 %}
+              🟡 <strong>Average Performance:</strong> Mixed results with slight positive bias.
+            {% else %}
+              🔴 <strong>Needs Attention:</strong> More negative days than positive, consider reviewing investment.
+            {% endif %}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Volatility Analysis -->
+  <div class="glass-card chart-container">
+    <div class="chart-title">📈 Volatility Analysis</div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+      <div>
+        <div id="volatility-bar-chart" style="height: 250px;"></div>
+      </div>
+      <div style="padding: 1rem;">
+        <h4 style="color: #2d3748; margin-bottom: 1rem;">Risk Assessment</h4>
+        <div style="background: rgba(255,255,255,0.5); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+            <span>Daily Volatility:</span>
+            <span style="font-weight: 700;">{{ metrics['Daily Volatility %'] }}%</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+            <span>Annual Volatility:</span>
+            <span style="font-weight: 700;">{{ metrics['Annual Volatility %'] }}%</span>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span>Best Day:</span>
+            <span style="font-weight: 700; color: #10b981;">+{{ metrics['Max Daily Gain %'] }}%</span>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span>Worst Day:</span>
+            <span style="font-weight: 700; color: #ef4444;">{{ metrics['Max Daily Loss %'] }}%</span>
+          </div>
+        </div>
+        <div style="background: rgba(255,255,255,0.5); padding: 1rem; border-radius: 8px;">
+          <p style="margin: 0; font-size: 0.9rem; color: #4a5568;">
+            {% if metrics['Annual Volatility %'] < 12 %}
+              🟢 <strong>Low Risk:</strong> Stable fund with predictable returns. Suitable for conservative investors.
+            {% elif metrics['Annual Volatility %'] < 18 %}
+              🟡 <strong>Medium Risk:</strong> Moderate price swings. Good for balanced portfolios.
+            {% else %}
+              🔴 <strong>High Risk:</strong> Significant price fluctuations. For aggressive investors only.
+            {% endif %}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Risk Metrics Explanation -->
+  <div class="glass-card">
+    <div class="chart-title">📚 Understanding Your Risk Metrics</div>
+    
+    <div style="margin-bottom: 2rem;">
+      <h4 style="color: #2d3748; margin-bottom: 1rem;">Industry Standard Risk Ratios</h4>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+        
+        <div style="background: rgba(255,255,255,0.5); padding: 1rem; border-radius: 8px;">
+          <h5 style="color: #2d3748; margin-bottom: 0.5rem;">📈 Sharpe Ratio</h5>
+          <p style="font-size: 0.85rem; color: #4a5568; margin: 0;">
+            Measures risk-adjusted return. Higher values indicate better performance per unit of risk. Above 1.0 is good, above 2.0 is excellent.
+          </p>
+        </div>
+
+        <div style="background: rgba(255,255,255,0.5); padding: 1rem; border-radius: 8px;">
+          <h5 style="color: #2d3748; margin-bottom: 0.5rem;">📉 Sortino Ratio</h5>
+          <p style="font-size: 0.85rem; color: #4a5568; margin: 0;">
+            Similar to Sharpe but only considers downside volatility. Better for evaluating funds with asymmetric risk profiles.
+          </p>
+        </div>
+
+        <div style="background: rgba(255,255,255,0.5); padding: 1rem; border-radius: 8px;">
+          <h5 style="color: #2d3748; margin-bottom: 0.5rem;">⚖️ Beta</h5>
+          <p style="font-size: 0.85rem; color: #4a5568; margin: 0;">
+            Measures sensitivity to market movements. Beta > 1 means more volatile than market, < 1 means less volatile.
+          </p>
+        </div>
+
+        <div style="background: rgba(255,255,255,0.5); padding: 1rem; border-radius: 8px;">
+          <h5 style="color: #2d3748; margin-bottom: 0.5rem;">🎯 Alpha</h5>
+          <p style="font-size: 0.85rem; color: #4a5568; margin: 0;">
+            Measures excess return compared to benchmark, adjusted for market risk. Positive alpha indicates outperformance.
+          </p>
+        </div>
+
+        <div style="background: rgba(255,255,255,0.5); padding: 1rem; border-radius: 8px;">
+          <h5 style="color: #2d3748; margin-bottom: 0.5rem;">📊 Information Ratio</h5>
+          <p style="font-size: 0.85rem; color: #4a5568; margin: 0;">
+            Measures active return per unit of tracking error. Higher values indicate better active management.
+          </p>
+        </div>
+
+        <div style="background: rgba(255,255,255,0.5); padding: 1rem; border-radius: 8px;">
+          <h5 style="color: #2d3748; margin-bottom: 0.5rem;">🏔️ Calmar Ratio</h5>
+          <p style="font-size: 0.85rem; color: #4a5568; margin: 0;">
+            Annual return divided by maximum drawdown. Higher values indicate better risk-adjusted performance.
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+    <h4 style="color: #2d3748; margin-bottom: 1rem;">Key Performance Metrics</h4>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+      
+      <div style="background: rgba(255,255,255,0.5); padding: 1rem; border-radius: 8px;">
+        <h5 style="color: #2d3748; margin-bottom: 0.5rem;">📈 Total Return</h5>
+        <p style="font-size: 0.85rem; color: #4a5568; margin: 0;">
+          The overall percentage gain or loss during your selected period. This shows how much your investment would have grown.
+        </p>
+      </div>
+
+      <div style="background: rgba(255,255,255,0.5); padding: 1rem; border-radius: 8px;">
+        <h5 style="color: #2d3748; margin-bottom: 0.5rem;">⚡ Daily Volatility</h5>
+        <p style="font-size: 0.85rem; color: #4a5568; margin: 0;">
+          Average daily price fluctuation. Higher values mean more unpredictable daily movements.
+        </p>
+      </div>
+
+      <div style="background: rgba(255,255,255,0.5); padding: 1rem; border-radius: 8px;">
+        <h5 style="color: #2d3748; margin-bottom: 0.5rem;">📊 Annual Volatility</h5>
+        <p style="font-size: 0.85rem; color: #4a5568; margin: 0;">
+          Yearly price fluctuation measure. Above 18% is high risk, below 12% is low risk.
+        </p>
+      </div>
+
+      <div style="background: rgba(255,255,255,0.5); padding: 1rem; border-radius: 8px;">
+        <h5 style="color: #2d3748; margin-bottom: 0.5rem;">✅ Positive Days %</h5>
+        <p style="font-size: 0.85rem; color: #4a5568; margin: 0;">
+          Percentage of days when the fund value increased. Above 55% indicates good performance.
+        </p>
+      </div>
+
+      <div style="background: rgba(255,255,255,0.5); padding: 1rem; border-radius: 8px;">
+        <h5 style="color: #2d3748; margin-bottom: 0.5rem;">💰 Best/Worst Day</h5>
+        <p style="font-size: 0.85rem; color: #4a5568; margin: 0;">
+          Single best and worst daily performance. Shows the range of daily price movements.
+        </p>
+      </div>
+
+      <div style="background: rgba(255,255,255,0.5); padding: 1rem; border-radius: 8px;">
+        <h5 style="color: #2d3748; margin-bottom: 0.5rem;">📅 Trading Days</h5>
+        <p style="font-size: 0.85rem; color: #4a5568; margin: 0;">
+          Total number of trading days in your selected period. Used for calculating all metrics.
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="action-buttons">
+    <form action="/download_pdf" method="post" style="margin: 0;">
+      <input type="hidden" name="scheme_code" value="{{ scheme_code }}">
+      <input type="hidden" name="start_date" value="{{ start }}">
+      <input type="hidden" name="end_date" value="{{ end }}">
+      <button type="submit" class="btn-primary">📊 Download Report</button>
+    </form>
+    <a href="/" class="btn-primary">🏠 Back to Home</a>
+  </div>
+</div>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script>
+  // NAV Chart - Simple line chart
+  document.addEventListener('DOMContentLoaded', function() {
+    try {
+      let navData = JSON.parse('{{ nav_json | safe }}');
+      
+      if (!navData || navData.length === 0) {
+        document.getElementById('nav-chart').innerHTML = '<div style="text-align: center; padding: 50px; color: #666;">No NAV data available</div>';
+        return;
+      }
+
+      const dates = navData.map(d => d.date);
+      const navs = navData.map(d => d.nav);
+
+      // NAV Line Chart
+      Plotly.newPlot('nav-chart', [{
+        x: dates,
+        y: navs,
+        type: 'scatter',
+        mode: 'lines+markers',
+        line: { 
+          color: '#667eea', 
+          width: 3
+        },
+        marker: {
+          size: 4,
+          color: '#667eea'
+        },
+        name: 'NAV'
+      }], {
+        title: {
+          text: 'NAV Movement ({{ start }} to {{ end }})',
+          font: { size: 14, color: '#2d3748' }
+        },
+        xaxis: {
+          title: 'Date',
+          tickfont: { color: '#4a5568' }
+        },
+        yaxis: {
+          title: 'NAV (₹)',
+          tickfont: { color: '#4a5568' }
+        },
+        plot_bgcolor: 'rgba(255,255,255,0.5)',
+        paper_bgcolor: 'rgba(255,255,255,0.5)',
+        font: { color: '#2d3748' },
+        margin: { t: 40, r: 30, b: 50, l: 60 }
+      });
+
+    } catch (error) {
+      console.error('Error loading NAV chart:', error);
+      document.getElementById('nav-chart').innerHTML = '<div style="text-align: center; padding: 50px; color: #666;">Error loading NAV chart</div>';
+    }
+
+    try {
+      // Positive/Negative Days Pie Chart
+      const positiveDays = {{ metrics['Positive Days'] }};
+      const negativeDays = {{ metrics['Negative Days'] }};
+      
+      Plotly.newPlot('days-pie-chart', [{
+        values: [positiveDays, negativeDays],
+        labels: ['Positive Days', 'Negative Days'],
+        type: 'pie',
+        marker: {
+          colors: ['#10b981', '#ef4444']
+        },
+        textinfo: 'label+percent',
+        textposition: 'auto',
+        hole: 0.3
+      }], {
+        title: {
+          text: 'Trading Days Distribution',
+          font: { size: 14, color: '#2d3748' }
+        },
+        showlegend: true,
+        font: { color: '#2d3748' },
+        margin: { t: 40, r: 50, b: 30, l: 50 }
+      });
+
+    } catch (error) {
+      console.error('Error loading days pie chart:', error);
+      document.getElementById('days-pie-chart').innerHTML = '<div style="text-align: center; padding: 50px; color: #666;">Error loading days chart</div>';
+    }
+
+    try {
+      // Volatility Bar Chart
+      const dailyVol = {{ metrics['Daily Volatility %'] }};
+      const annualVol = {{ metrics['Annual Volatility %'] }};
+      
+      Plotly.newPlot('volatility-bar-chart', [{
+        x: ['Daily Volatility', 'Annual Volatility'],
+        y: [dailyVol, annualVol],
+        type: 'bar',
+        marker: {
+          color: ['#f59e0b', '#8b5cf6']
+        },
+        text: [dailyVol + '%', annualVol + '%'],
+        textposition: 'auto'
+      }], {
+        title: {
+          text: 'Volatility Comparison',
+          font: { size: 14, color: '#2d3748' }
+        },
+        xaxis: {
+          title: 'Volatility Type',
+          tickfont: { color: '#4a5568' }
+        },
+        yaxis: {
+          title: 'Volatility (%)',
+          tickfont: { color: '#4a5568' }
+        },
+        plot_bgcolor: 'rgba(255,255,255,0.5)',
+        paper_bgcolor: 'rgba(255,255,255,0.5)',
+        font: { color: '#2d3748' },
+        margin: { t: 40, r: 30, b: 50, l: 60 }
+      });
+
+    } catch (error) {
+      console.error('Error loading volatility chart:', error);
+      document.getElementById('volatility-bar-chart').innerHTML = '<div style="text-align: center; padding: 50px; color: #666;">Error loading volatility chart</div>';
+    }
+  });
+</script>
+
+<style>
+.chart-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.chart-container {
+  text-align: center;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 0.75rem 2rem;
+  border: none;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+@media (max-width: 768px) {
+  .glass-card {
+    padding: 1.5rem;
+  }
+  
+  .chart-title {
+    font-size: 1.1rem;
+  }
+  
+  #nav-chart, #days-pie-chart, #volatility-bar-chart {
+    height: 250px !important;
+  }
+}
+</style>
+{% endblock %}

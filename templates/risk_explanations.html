@@ -1,0 +1,165 @@
+<!-- Risk Metrics Explanations Modal -->
+<div id="riskModal" class="modal fade" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Risk Metrics Explained</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6">
+            <h6>Basic Risk Metrics</h6>
+            <dl>
+              <dt>Alpha (α)</dt>
+              <dd>Measures fund's performance relative to expected return based on market risk (Beta). Positive alpha indicates outperformance.</dd>
+              
+              <dt>Beta (β)</dt>
+              <dd>Measures sensitivity to market movements. β=1 means fund moves with market, β>1 is more volatile, β<1 is less volatile.</dd>
+              
+              <dt>R-squared (R²)</dt>
+              <dd>Percentage of fund's movements explained by market movements. Higher R² indicates stronger correlation with benchmark.</dd>
+              
+              <dt>Standard Deviation</dt>
+              <dd>Measures total risk/volatility. Higher values indicate more price fluctuations and higher risk.</dd>
+              
+              <dt>Sharpe Ratio</dt>
+              <dd>Risk-adjusted return measure. Higher values indicate better return per unit of risk taken.</dd>
+            </dl>
+          </div>
+          
+          <div class="col-md-6">
+            <h6>Advanced Risk Metrics</h6>
+            <dl>
+              <dt>Sortino Ratio</dt>
+              <dd>Similar to Sharpe but only considers downside volatility. Better measure for risk-averse investors.</dd>
+              
+              <dt>Maximum Drawdown</dt>
+              <dd>Largest peak-to-trough decline. Indicates worst-case scenario loss during the period.</dd>
+              
+              <dt>Value at Risk (VaR)</dt>
+              <dd>Potential loss at 95% confidence level. "5% chance of losing more than X% in a day".</dd>
+              
+              <dt>Conditional VaR (CVaR)</dt>
+              <dd>Average loss when VaR is exceeded. Measures tail risk beyond VaR threshold.</dd>
+              
+              <dt>Information Ratio</dt>
+              <dd>Active return per unit of tracking error. Measures skill of fund manager.</dd>
+              
+              <dt>Calmar Ratio</dt>
+              <dd>Annual return divided by maximum drawdown. Measures return relative to worst losses.</dd>
+            </dl>
+          </div>
+        </div>
+        
+        <div class="row mt-4">
+          <div class="col-12">
+            <h6>Risk Level Classification</h6>
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th>Risk Level</th>
+                  <th>Volatility</th>
+                  <th>Max Drawdown</th>
+                  <th>Sharpe Ratio</th>
+                  <th>Investor Profile</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="table-success">
+                  <td><strong>Low Risk</strong></td>
+                  <td>&lt; 12%</td>
+                  <td>&lt; 15%</td>
+                  <td>&gt; 1.0</td>
+                  <td>Conservative, Capital Preservation</td>
+                </tr>
+                <tr class="table-warning">
+                  <td><strong>Medium Risk</strong></td>
+                  <td>12% - 18%</td>
+                  <td>15% - 25%</td>
+                  <td>0.5 - 1.0</td>
+                  <td>Balanced, Moderate Growth</td>
+                </tr>
+                <tr class="table-danger">
+                  <td><strong>High Risk</strong></td>
+                  <td>&gt; 18%</td>
+                  <td>&gt; 25%</td>
+                  <td>&lt; 0.5</td>
+                  <td>Aggressive, High Growth</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        <div class="row mt-3">
+          <div class="col-12">
+            <h6>Positive/Negative Days Analysis</h6>
+            <p>
+              <strong>Positive Days %:</strong> Percentage of trading days with positive returns. Higher values indicate more consistent performance.
+              <br><strong>Negative Days %:</strong> Percentage of trading days with negative returns. Lower values are preferable.
+              <br><strong>Interpretation:</strong> A fund with 55%+ positive days is considered good. Consistency matters more than individual day performance.
+            </p>
+          </div>
+        </div>
+        
+        <div class="row mt-3">
+          <div class="col-12">
+            <h6>Benchmark Comparison</h6>
+            <p>
+              Compares fund performance against market benchmark (Nifty 50). Key indicators:
+              <ul>
+                <li><strong>Return Difference:</strong> Fund return minus benchmark return</li>
+                <li><strong>Volatility Difference:</strong> Fund risk minus benchmark risk</li>
+                <li><strong>Sharpe Difference:</strong> Fund's risk-adjusted performance vs benchmark</li>
+                <li><strong>Outperformed Benchmark:</strong> Whether fund beat the market</li>
+              </ul>
+            </p>
+          </div>
+        </div>
+        
+        <div class="row mt-3">
+          <div class="col-12">
+            <div class="alert alert-info">
+              <h6>💡 Risk Assessment Tips</h6>
+              <ul>
+                <li><strong>Conservative Investors:</strong> Look for Low Risk, Sharpe Ratio &gt; 1.0, Max Drawdown &lt; 15%</li>
+                <li><strong>Moderate Investors:</strong> Medium Risk acceptable, Sharpe Ratio 0.5-1.0, focus on consistent returns</li>
+                <li><strong>Aggressive Investors:</strong> Can tolerate High Risk if compensated by high returns, check Alpha & Information Ratio</li>
+                <li><strong>All Investors:</strong> Avoid funds with negative Alpha, very high Beta (&gt;1.5), or frequent large drawdowns</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.modal-body dt {
+  font-weight: bold;
+  color: #495057;
+  margin-top: 10px;
+}
+
+.modal-body dd {
+  margin-bottom: 15px;
+  font-size: 0.9rem;
+}
+
+.table-success {
+  background-color: #d4edda;
+}
+
+.table-warning {
+  background-color: #fff3cd;
+}
+
+.table-danger {
+  background-color: #f8d7da;
+}
+</style>
